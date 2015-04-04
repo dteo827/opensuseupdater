@@ -89,12 +89,12 @@ case $menusel in
         "mySQL")
                 resetMysql
                 pause 
-                extras;;
+                answerHardeningScripts;;
                 
         "Shellshock")
                 answerShellshock
                 pause
-                extras;;
+                answerHardeningScripts;;
                  
         "Install All")
                 echo -e "\e[31m[+] Installing Extra's\e[0m"
@@ -102,7 +102,7 @@ case $menusel in
                 answershellshock
                 echo -e "\e[32m[-] Done Installing Extra's\e[0m"
                 pause
-                extras ;;         
+                answerHardeningScripts ;;         
 
         "Back to Main")
                 clear
@@ -111,7 +111,7 @@ case $menusel in
         *)
                 screwup
                 echo "ya messed up"
-                extras ;;
+                answerHardeningScripts ;;
                
 esac
 
@@ -255,6 +255,10 @@ function answerLynis {
         fi        
 }
 
+#### pause function
+function pause(){
+   read -sn 1 -p "Press any key to continue..."
+}
 #### credits
 function credits {
 clear
@@ -286,37 +290,37 @@ case $menusel in
         "Lynis")
                 answerLynis
                 pause 
-                extras;;
+                answerDefense;;
                 
         "Fail2ban")
                 answerFail2ban
                 pause
-                extras;;
+                answerDefense;;
                 
         "Nikto")
                 answerNikto
                 pause 
-                extras;;
+                answerDefense;;
                 
         "Nmap")
                 answerNmap
                 pause 
-                extras;;
+                answerDefense;;
                 
         "Nessus")
                 answerNessus
                 pause 
-                extras;;
+                answerDefense;;
                 
         "OSSEC")
                 answerOSSEC
                 pause 
-                extras;;
+                answerDefense;;
                                 
         "Artillery")
                 answerArtillery
                 pause 
-                extras ;;
+                answerDefense ;;
                 
         "Install All")
                 echo -e "\e[31m[+] Installing Extra's\e[0m"
@@ -329,7 +333,7 @@ case $menusel in
                 answerArtillery
                 echo -e "\e[32m[-] Done Installing Extra's\e[0m"
                 pause
-                extras ;;         
+                answerDefense ;;         
 
         "Back to Main")
                 clear
@@ -337,7 +341,7 @@ case $menusel in
                 
         *)
                 screwup
-                extras ;;
+                answerDefense ;;
         
                 
 esac
