@@ -33,51 +33,7 @@ function answerUpdate {
 #    Hardening Scripts      #
 #############################
 
-function answerHardeningScripts {
-clear
-
-echo -e "
-\033[31m#######################################################\033[m
-                Hardening Scripts
-\033[31m#######################################################\033[m"
-
-select menusel in "mySQL" "Shellshock" "Install All" "Back to Main"; do
-case $menusel in
-        "mySQL")
-                answermysql
-                pause 
-                extras;;
-                
-        "Shellshock")
-                answerShellshock
-                pause
-                extras;;
-                 
-        "Install All")
-                echo -e "\e[31m[+] Installing Extra's\e[0m"
-                answermysql
-                answershellshock
-                echo -e "\e[32m[-] Done Installing Extra's\e[0m"
-                pause
-                extras ;;         
-
-        "Back to Main")
-                clear
-                mainmenu ;;
-                
-        *)
-                screwup
-                extras ;;
-               
-esac
-
-break
-
-done
-}
-
-
-######## Install 
+######## FixShellshock
 function answerShellshock {
         echo "This will fix shellshock. Do you want to do this ? (Y/N)"
         read install
@@ -121,9 +77,52 @@ function resetMysql {
         fi        
 }
 
-#############################
-#    Defense Programs      #
-#############################
+function answerHardeningScripts {
+clear
+echo -e "
+\033[31m#######################################################\033[m
+                Hardening Scripts
+\033[31m#######################################################\033[m"
+
+select menusel in "mySQL" "Shellshock" "Install All" "Back to Main"; do
+case $menusel in
+        "mySQL")
+                answerMysql
+                pause 
+                extras;;
+                
+        "Shellshock")
+                answerShellshock
+                pause
+                extras;;
+                 
+        "Install All")
+                echo -e "\e[31m[+] Installing Extra's\e[0m"
+                answerMysql
+                answershellshock
+                echo -e "\e[32m[-] Done Installing Extra's\e[0m"
+                pause
+                extras ;;         
+
+        "Back to Main")
+                clear
+                mainmenu ;;
+                
+        *)
+                screwup
+                echo "ya messed up"
+                extras ;;
+               
+esac
+
+break
+
+done
+}
+
+##########################################
+#           Defense Programs             #
+##########################################
 
 ######## Install OSSEC
 function answerOSSEC {
@@ -347,6 +346,7 @@ break
 
 done
 }
+
 ########################################################
 ##             Main Menu Section
 ########################################################
