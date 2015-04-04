@@ -12,6 +12,70 @@ echo "my name" >> file
 echo
 echo dpkg -l >> file
 
+clear
+version="2.0"
+#some variables
+DEFAULT_ROUTE=$(ip route show default | awk '/default/ {print $3}')
+IFACE=$(ip route show | awk '(NR == 2) {print $3}')
+JAVA_VERSION=`java -version 2>&1 |awk 'NR==1{ gsub(/"/,""); print $3 }'`
+MYIP=$(ip route show | awk '(NR == 2) {print $9}')
+
+if [ $UID -ne 0 ]; then
+    echo -e "\033[31This program must be run as root.This will probably fail.\033[m"
+    sleep 3
+    fi
+
+###### Install script if not installed
+if [ ! -e "/usr/bin/lazysuse" ];then
+        echo "Script is not installed. Do you want to install it ? (Y/N)"
+        read install
+        if [[ $install = Y || $install = y ]] ; then
+                cp -v $0 /usr/bin/lazysuse
+                chmod +x /usr/bin/lazysuse
+                #rm $0
+                echo "Script should now be installed. Launching it !"
+                sleep 3
+                lazysuse
+                exit 1
+        else
+                echo -e "\e[32m[-] Ok,maybe later !\e[0m"
+        fi
+else
+        echo "Script is installed"
+        sleep 1
+fi
+### End of install process
+
+#### pause function
+function pause(){
+   read -sn 1 -p "Press any key to continue..."
+}
+
+#### credits
+function credits {
+clear
+echo -e "
+\033[31m#######################################################\033[m
+                       Credits To
+\033[31m#######################################################\033[m"
+echo -e "\033[36m
+David Teo For Making the script.
+Pashapasta for the idea and version 1.0
+lazykali.sh for UI 
+Adam Shuman for mysql stuff
+
+and anyone else I may have missed.
+
+\033[m"
+}
+
+#### Screwup function
+function screwup {
+        echo "You Screwed up somewhere, try again."
+        pause 
+        clear
+}
+
 ######## Update OpenSuse
 function answerUpdate {
         echo "This will fully update OpenSUSE, this will take a while. Do you want to do this? (Y/N)"
@@ -110,7 +174,6 @@ case $menusel in
                 
         *)
                 screwup
-                echo "ya messed up"
                 answerHardeningScripts ;;
                
 esac
@@ -255,31 +318,8 @@ function answerLynis {
         fi        
 }
 
-#### pause function
-function pause(){
-   read -sn 1 -p "Press any key to continue..."
-}
-#### credits
-function credits {
-clear
-echo -e "
-\033[31m#######################################################\033[m
-                       Credits To
-\033[31m#######################################################\033[m"
-echo -e "\033[36m
-David Teo For Making the script.
-Pashapasta for the idea and version 1.0
-lazykali.sh for UI 
-Adam Shuman for mysql stuff
-
-and anyone else I may have missed.
-
-\033[m"
-}
-
 function answerDefense {
 clear
-
 echo -e "
 \033[31m#######################################################\033[m
                 Install Defense Programs
