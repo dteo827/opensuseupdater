@@ -26,7 +26,8 @@ function answerUpdate {
                 echo -e "\e[32m[-] Done Updating!\e[0m"           
         else
                 echo -e "\e[32m[-] Ok,maybe later !\e[0m"
-        fi        
+        fi
+
 }
 #############################
 #    Hardening Scripts      #
@@ -40,15 +41,15 @@ echo -e "
                 Hardening Scripts
 \033[31m#######################################################\033[m"
 
-select menusel in "Lynis" "Shellshock" "Install All" "Back to Main"; do
+select menusel in "mySQL" "Shellshock" "Install All" "Back to Main"; do
 case $menusel in
         "mySQL")
                 answermysql
                 pause 
                 extras;;
                 
-        "Fail2ban")
-                answershellshock
+        "Shellshock")
+                answerShellshock
                 pause
                 extras;;
                  
@@ -77,7 +78,7 @@ done
 
 
 ######## Install 
-function answershelshock {
+function answerShellshock {
         echo "This will fix shellshock. Do you want to do this ? (Y/N)"
         read install
         if [[ $install = Y || $install = y ]] ; then
@@ -362,8 +363,10 @@ echo -e "
 
 \033[m                                        
                    Script by dteo827
-                    version : 2.0
+                    version : \033[32m$version\033[m
 Script Location : \033[32m$0\033[m
+Connection Info :-----------------------------------------------
+  Gateway: \033[32m$DEFAULT_ROUTE\033[m Interface: \033[32m$IFACE\033[m My LAN Ip: \033[32m$MYIP\033[m
 \033[31m################################################################\033[m"
 
 select menusel in "Update SUSE" "Hardening Scripts" "Defense Programs" "HELP!" "Credits" "EXIT PROGRAM"; do
