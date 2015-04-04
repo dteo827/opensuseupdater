@@ -33,7 +33,26 @@ function answerUpdate {
 #    Hardening Scripts      #
 #############################
 
-######## FixShellshock
+######## resetMysql 
+function resetMysql {
+        echo "This will reset the mysql password. Do you want to do this? (Y/N)"
+        read install
+        if [[ $install = Y || $install = y ]] ; then
+                echo -e "\e[31m[+] Resetting now!\e[0m"
+                kill `ps aux | grep mysqld`
+                read -p "What would you like the password to be? " password
+                sudo echo UPDATE mysql.user SET Password='$password' WHERE User='root';'\n'FLUSH PRIVILEGES;'\n'quit; >> /root/mysql-init
+                mysqld_safe --init-file=/root/mysql-init
+                rm /home/root/mysql-init
+                /etc/init.d/mysql restart
+                echo "Reset mySQL Password, this task was completed at: " $(date) >> changes
+                echo -e "\e[32m[-] Done resetting mysql !\e[0m"           
+        else
+                echo -e "\e[32m[-] Ok,maybe later !\e[0m"
+        fi        
+}
+
+######## Fix Shellshock
 function answerShellshock {
         echo "This will fix shellshock. Do you want to do this ? (Y/N)"
         read install
@@ -58,25 +77,6 @@ function answerShellshock {
         fi        
 }
 
-######## resetMysql 
-function resetMysql {
-        echo "This will reset the mysql password. Do you want to do this? (Y/N)"
-        read install
-        if [[ $install = Y || $install = y ]] ; then
-                echo -e "\e[31m[+] Resetting now!\e[0m"
-                kill `ps aux | grep mysqld`
-                read -p "What would you like the password to be? " password
-                sudo echo UPDATE mysql.user SET Password='$password' WHERE User='root';'\n'FLUSH PRIVILEGES;'\n'quit; >> /root/mysql-init
-                mysqld_safe --init-file=/root/mysql-init
-                rm /home/root/mysql-init
-                /etc/init.d/mysql restart
-                echo "Reset mySQL Password, this task was completed at: " $(date) >> changes
-                echo -e "\e[32m[-] Done resetting mysql !\e[0m"           
-        else
-                echo -e "\e[32m[-] Ok,maybe later !\e[0m"
-        fi        
-}
-
 function answerHardeningScripts {
 clear
 echo -e "
@@ -87,7 +87,7 @@ echo -e "
 select menusel in "mySQL" "Shellshock" "Install All" "Back to Main"; do
 case $menusel in
         "mySQL")
-                answerMysql
+                resetMysql
                 pause 
                 extras;;
                 
