@@ -362,10 +362,8 @@ echo -e "
 
 \033[m                                        
                    Script by dteo827
-                    version : \033[32m$version\033[m
+                    version : 2.0
 Script Location : \033[32m$0\033[m
-Connection Info :-----------------------------------------------
-  Gateway: \033[32m$DEFAULT_ROUTE\033[m Interface: \033[32m$IFACE\033[m My LAN Ip: \033[32m$MYIP\033[m
 \033[31m################################################################\033[m"
 
 select menusel in "Update SUSE" "Hardening Scripts" "Defense Programs" "HELP!" "Credits" "EXIT PROGRAM"; do
