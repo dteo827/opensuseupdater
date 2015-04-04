@@ -141,6 +141,7 @@ function answerShellshock {
         fi        
 }
 
+#### HardeningScripts
 function answerHardeningScripts {
 clear
 echo -e "
@@ -152,20 +153,20 @@ select menusel in "mySQL" "Shellshock" "Install All" "Back to Main"; do
 case $menusel in
         "mySQL")
                 resetMysql
-                pause 
-                answerHardeningScripts;;
+                pause
+                answerHardeningScripts ;;
                 
         "Shellshock")
                 answerShellshock
                 pause
-                answerHardeningScripts;;
+                answerHardeningScripts ;;
                  
         "Install All")
                 echo -e "\e[31m[+] Installing Extra's\e[0m"
                 answerMysql
                 answershellshock
                 echo -e "\e[32m[-] Done Installing Extra's\e[0m"
-                pause
+                pause ;;
                 answerHardeningScripts ;;         
 
         "Back to Main")
