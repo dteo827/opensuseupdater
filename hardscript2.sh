@@ -32,8 +32,6 @@ function answerUpdate {
 #    Hardening Scripts      #
 #############################
 
-}
-
 function answerHardeningScripts {
 clear
 
