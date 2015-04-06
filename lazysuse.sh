@@ -3,14 +3,12 @@
 # Optimized for OpenSUSE 11.3
 # Please contact dteo827@gmail.com with bugs or feature requests
 
-echo "version"
-lsb_release -r >> file
+""
+"Computer info: \nVersion:" >> changes
+lsb_release -r >> changes
 uname -r >> file
-echo date >> file
-echo
-echo "my name" >> file
-echo
-echo dpkg -l >> file
+date >> changes
+dpkg -l >> file
 
 clear
 version="2.0"
@@ -86,6 +84,7 @@ function answerUpdate {
                 zypper ar -f http://ftp5.gwdg.de/pub/opensuse/discontinued/distribution/11.3/repo/oss oss
                 sudo zypper refresh
                 sudo zypper up
+                sudo zypper install cups
                 echo "Fully Updated OpenSUSE release, this task was completed at: " $(date) >> changes
                 echo -e "\e[32m[-] Done Updating!\e[0m"           
         else
@@ -96,6 +95,73 @@ function answerUpdate {
 #############################
 #    Hardening Scripts      #
 #############################
+######## resetMysql 
+function disableAccounts {
+        echo "This will disable login on all accounts except the ones made during/after install. Do you want to do this? (Y/N)"
+        read install
+        if [[ $install = Y || $install = y ]] ; then
+                echo -e "\e[31m[+] Resetting now!\e[0m"
+                passwd at -l
+                passwd avahi -l
+                passwd bin -l
+                passwd daemon -l
+                passwd dnsmasq -l
+                passwd ftp -l
+                passwd games -l
+                passwd gdm -l
+                passwd haldaemon -l
+                passwd lp -l
+                passwd mail -l
+                passwd man -l
+                passwd messagebus -l
+                passwd news -l
+                passwd nobody -l
+                passwd ntp -l
+                passwd polkituser -l
+                passwd postfix -l
+                passwd pulse -l
+                passwd rtkit -l
+                passwd sshd -l
+                passwd suse-ncc -l
+                passwd uucp -l
+                passwd wwwrun -l
+                echo "All accounts disabled, this task was completed at: " $(date) >> changes
+                echo -e "\e[32m[-] Done disabling accounts !\e[0m"           
+        else
+                echo -e "\e[32m[-] Ok,maybe later !\e[0m"
+        fi        
+}
+
+##### Download and compile Grsecurity
+function grsecurity {
+        echo "This will install Grsecurity. Do you want to do this? (Y/N)"
+        read install
+        if [[ $install = Y || $install = y ]] ; then
+            #download kernel 
+            wget https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.14.37.tar.xz --no-check-certificate
+
+            #unzip and change directories
+            tar -xf linux-3.14.37.tar.xz
+            cd linux-3.14.37
+
+            #download grsec and gradm inside kernel directory
+            wget https://grsecurity.net/stable/grsecurity-3.1-3.14.37-201504051405.patch --no-check-certificate
+            wget https://grsecurity.net/stable/gradm-3.1-201503211320.tar.gz --no-check-certificate
+            tar -zxvf gradm-3.1-201503211320.tar.g
+            #patch kernel
+            sudo zypper install patch
+            sudo zypper install make
+            sudo zypper install gcc
+            sudo zypper install ncurses-devel
+
+            patch -p1make <grsecurity-3.1-3.14.37-201504051405.patch
+            make menuconfig
+
+        else
+            echo -e "\e[32m[-] Ok,maybe later !\e[0m"
+        fi   
+
+}
 
 ######## resetMysql 
 function resetMysql {
@@ -149,8 +215,12 @@ echo -e "
                 Hardening Scripts
 \033[31m#######################################################\033[m"
 
-select menusel in "mySQL" "Shellshock" "Install All" "Back to Main"; do
+select menusel in "Grsecurity" "mySQL" "Shellshock" "Disable all other Accounts" "Install All" "Back to Main"; do
 case $menusel in
+        "Grsecurity")
+                grsecurity
+                pause
+                answerHardeningScripts ;;
         "mySQL")
                 resetMysql
                 pause
@@ -160,13 +230,19 @@ case $menusel in
                 answerShellshock
                 pause
                 answerHardeningScripts ;;
-                 
+
+        "Disable all other Accounts")
+                disableAccounts
+                pause
+                answerHardeningScripts ;;
+
         "Install All")
                 echo -e "\e[31m[+] Installing Extra's\e[0m"
                 answerMysql
                 answershellshock
+                disableAccounts
                 echo -e "\e[32m[-] Done Installing Extra's\e[0m"
-                pause ;;
+                pause
                 answerHardeningScripts ;;         
 
         "Back to Main")
