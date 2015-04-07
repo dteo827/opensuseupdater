@@ -6,9 +6,9 @@
 ""
 "Computer info: \nVersion:" >> changes
 lsb_release -r >> changes
-uname -r >> file
+uname -r >> changes
 date >> changes
-dpkg -l >> file
+dpkg -l >> changes
 
 clear
 version="2.0"
@@ -156,9 +156,22 @@ function grsecurity {
 
             patch -p1make <grsecurity-3.1-3.14.37-201504051405.patch
             make menuconfig
-
+            make rpm
+            cd /usr/src/packages/RPMS/i386/
+            rpm -ivh kernel-3.14.37_0.6_desktop-1.i386.rpm
+            mkinitrd
+            # Add kernel entry to boot menu
+            echo -e "
+            \033[31m#######################################################\033[m
+                        DOUBLE CHECK mkinitrd ADD TO /boot/grub/menu.lst
+            \033[31m#######################################################\033[m"
+            echo "OpenSuse 11.3 With Grsecurity 3.14.37-0.6" >> /boot/grub/menu.lst
+            #echo "     root (hd0,1)" >> /boot/grub/menu.lst
+            #echo "     kernel /boot/vmlinuz-3.14.37-0.6-desktop root=/dev/sda2 resume=/dev/disk/by-id/ata-OpenSUSE_11.3-0_SSD_JNKM3MF2V3Z4DFYXB0EX-part2 resume=/dev/disk/by-id/ata-OpenSUSE_11.3-0_SSD_JNKM3MF2V3Z4DFYXB0EX-part1 splash=silent crashkernel=256M-:128M showopts vga=0x339" >> /boot/grub/menu.lst            
+            #echo "     initrd /boot/initrd-3.14.37-0.6-desktop" >> /boot/grub/menu.lst
+            
         else
-            echo -e "\e[32m[-] Ok,maybe later !\e[0m"
+             echo -e "\e[32m[-] Ok,maybe later !\e[0m"
         fi   
 
 }
