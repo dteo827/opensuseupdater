@@ -63,6 +63,9 @@ lazykali.sh for UI
 Adam Shuman for mysql stuff
 
 and anyone else I may have missed.
+#vi /etc/apache/sites-enabled
+
+#directory - > /var/www | change to index.php
 
 \033[m"
 }
