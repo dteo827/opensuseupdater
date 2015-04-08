@@ -67,6 +67,8 @@ and anyone else I may have missed.
 
 #directory - > /var/www | change to index.php
 
+#/public_htm
+
 \033[m"
 }
 
